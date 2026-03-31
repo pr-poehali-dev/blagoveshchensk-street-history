@@ -1,0 +1,20 @@
+{
+  "tests": [
+    {
+      "name": "Get all streets",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {"streets": []},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Search streets",
+      "method": "GET",
+      "path": "/?search=Ленина",
+      "expectedStatus": 200,
+      "expectedBody": {"streets": []},
+      "bodyMatcher": "partial"
+    }
+  ]
+}
