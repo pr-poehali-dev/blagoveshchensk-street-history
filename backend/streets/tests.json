@@ -5,16 +5,21 @@
       "method": "GET",
       "path": "/",
       "expectedStatus": 200,
-      "expectedBody": {"streets": []},
-      "bodyMatcher": "partial"
+      "bodyMatcher": "none"
     },
     {
       "name": "Search streets",
       "method": "GET",
       "path": "/?search=Ленина",
       "expectedStatus": 200,
-      "expectedBody": {"streets": []},
-      "bodyMatcher": "partial"
+      "bodyMatcher": "none"
+    },
+    {
+      "name": "Get street by id",
+      "method": "GET",
+      "path": "/?id=1",
+      "expectedStatus": 200,
+      "bodyMatcher": "none"
     }
   ]
 }

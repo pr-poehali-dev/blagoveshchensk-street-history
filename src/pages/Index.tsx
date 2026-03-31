@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const STREETS_URL = 'https://functions.poehali.dev/89188024-4032-43c3-93e4-d68bf30880f6';
 
@@ -11,6 +12,7 @@ interface Street {
 }
 
 const Index = () => {
+  const navigate = useNavigate();
   const [streets, setStreets] = useState<Street[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
@@ -105,6 +107,7 @@ const Index = () => {
             {streets.map((street, i) => (
               <div
                 key={street.id}
+                onClick={() => navigate(`/street/${street.id}`)}
                 className="bg-[#f5f2ee] p-8 hover:bg-white transition-colors duration-300 cursor-pointer group"
               >
                 <div className="flex items-start justify-between mb-4">

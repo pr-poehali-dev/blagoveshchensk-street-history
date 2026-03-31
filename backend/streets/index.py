@@ -17,7 +17,7 @@ def get_conn():
 
 
 def handler(event: dict, context) -> dict:
-    """Возвращает список улиц Благовещенска с возможностью поиска по названию."""
+    """Возвращает список улиц или одну улицу по id для проекта Улицы Благовещенска."""
     if event.get('httpMethod') == 'OPTIONS':
         return {
             'statusCode': 200,
@@ -31,9 +31,29 @@ def handler(event: dict, context) -> dict:
         }
 
     params = event.get('queryStringParameters') or {}
+    street_id = params.get('id', '').strip()
     search = params.get('search', '').strip()
 
     conn = get_conn()
+
+    if street_id:
+        safe_id = street_id.replace("'", "''")
+        rows = conn.run(
+            f"SELECT id, name, era, year, description FROM streets WHERE id = '{safe_id}'"
+        )
+        conn.close()
+        if not rows:
+            return {
+                'statusCode': 404,
+                'headers': {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'},
+                'body': json.dumps({'error': 'Улица не найдена'}, ensure_ascii=False)
+            }
+        r = rows[0]
+        return {
+            'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'},
+            'body': json.dumps({'street': {'id': r[0], 'name': r[1], 'era': r[2], 'year': r[3], 'description': r[4]}}, ensure_ascii=False)
+        }
 
     if search:
         safe = search.replace("'", "''")
